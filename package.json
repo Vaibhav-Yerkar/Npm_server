@@ -1,0 +1,23 @@
+{
+  "name": "project-1",
+  "version": "1.0.0",
+  "description": "This is just a test repo.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "nodemn" : "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vaibhav-Yerkar/Npm_server.git"
+  },
+  "author": "vaibhav",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vaibhav-Yerkar/Npm_server/issues"
+  },
+  "homepage": "https://github.com/Vaibhav-Yerkar/Npm_server#readme",
+  "dependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
