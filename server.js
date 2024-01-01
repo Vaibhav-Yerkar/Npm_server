@@ -1,72 +1,40 @@
-const http = require("http");
+// const http = require("http");
+const express = require("express");
 
-port = 8081;
+const app = express();
+app.use(express.json());
 
-//HTTP Methods :
-/**
- >> GET : to get data from server
- >> POST : sending data to server
- >> DELETE : deleting data from database
- >> PATCH : updating certain fields
- >> PUT : Full update
- */
 
- const toDoList = ["learn", "apply things", "succed"];
+const port = 8081;
 
-http
- .createServer((req, res) => {
-   const {method, url} = req;
-   if(url ==="/todos"){
-      if (method === "GET" ){
-         res.writeHead(200, { "Content-Type": "text/html" }); 
-         res.write(toDoList.toString());
-      }else if(method === "POST"){
-         let body ="";
-         req
-          .on("error",(err)=>{
-            console.loh(err);
-          }).on('data',(chunck)=>{
-            body+=chunck;
-            console.log(chunck);
-          }).on('end',()=>{
-            body=JSON.parse(body);
-            let newTodoList = toDoList;
-            newTodoList.push(body.item);
-            console.log("data: ",body);
-          })
-      }else if(method === "DELETE"){
-         let body = "";
-         req
-          .on('error',(err)=>{
-            console.error(err);
-          })
-          .on('data',(chunck)=>{
-            body+=chunck;
-          })
-          .on('end',()=>{
-            body = JSON.parse(body);
-            let itemToDelete = body.item;
-            // for(let i=0;i<toDoList.length;i++){
-            //    if(toDoList[i]==itemToDelete)
-            //    {  toDoList.splice(i,1);
-            //       break;
-            //    }
-            // }
+const toDoList = ["learn", "apply things", "succed"];
 
-            toDoList.find((elem,index)=>{
-               if(elem === itemToDelete){
-                  toDoList.splice(index,1);
-               }
-            })
-          })
-      }else{
-         res.writeHead(501);
+//* http://localhost:8081/todos
+app.get("/todos",(req,res)=>{
+   //res.writeHead(200)
+   //res.write(toDoList)
+   res.status(200).send(toDoList);
+});
+
+app.post('/todos',(req,res)=>{
+   let newtoDoItem = req.body.name;
+   toDoList.push(newtoDoItem);
+   res.status(201).send({ message : "Data added Successfully"});
+});
+
+app.delete('/todos',(req,res)=>{
+   let dataToDelete =  req.body.name;
+   toDoList.find((elem,index)=>{
+      if(elem === dataToDelete){
+         toDoList.splice(index,1);
+         res.status(201).send({message : "Data deleted Successfully"});
       }
-   }else{
-      res.writeHead (404);
-   }
-   res.end();
-})
-.listen(port, ()=>{
-   console.log(`running node server on port : http://localhost:${port}`);
+   });
+});
+app.all('/todos',(req,res)=>{
+   res.status(501).send({message : "not Implemented yet"});
+});
+
+app.listen(port,()=>{
+   console.log(`Server running - http://localhost:${port}/todos`);
 })
